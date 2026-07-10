@@ -1,0 +1,33 @@
+src/components/steps/
+├── Analysis/
+│   └── AnalysisStep.jsx
+├── diagrams3D/
+│   └── DiagramsStep.jsx
+├── model3D/
+│   └── Model3DStep.jsx
+├── obstacleMapping/
+│   └── ObstaclesStep.jsx
+├── productSelection/
+│   └── ProductsStep.jsx
+├── reportGenerator/
+│   └── ReportStep.jsx
+├── simulation/
+│   └── SimulationStep.jsx
+└── siteLocation/
+    └── SiteStep.jsxsrc/services/
+
+├── solarCalculations.js  ← From data.js
+├── geocoding.js         ← API services
+└── validation.js        ← System validation
+
+src/hooks/
+├── useSolarStore.jsx    ← Zustand store
+├── useGeolocation.jsx   ← Location handling
+├── useSolarData.jsx     ← NASA API calls
+└── useValidation.jsx    ← Form validation
+
+src/components/common/
+├── MapSection.jsx       ← Leaflet map component
+├── LoadingSpinner.jsx   ← Loading states
+├── ValidationMessages.jsx ← Error/warning displays
+└── ProductSelector.jsx  ← Dropdown selectors
