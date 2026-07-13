@@ -76,6 +76,69 @@ function ObstacleBuilding({ obs, index, color, showLabels, bindGroup, unBindGrou
     });
   }, [oH, oW, oD, color]);
 
+  const isTree = obs.type === 'tree' || String(obs.name || '').toLowerCase().includes('tree');
+
+  if (isTree) {
+    const trunkHeight = oH * 0.35;
+    const canopyHeight = oH * 0.65;
+    const trunkRadius = Math.max(0.08, oW * 0.08);
+    const leafRadius = oW * 0.45;
+
+    return (
+      <group ref={groupRef} position={[mx, 0, mz]}>
+        {/* Tree Trunk */}
+        <mesh position={[0, trunkHeight / 2, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[trunkRadius * 0.8, trunkRadius, trunkHeight, 8]} />
+          <meshPhongMaterial
+            color={0x5c4033}
+            specular={0x111111}
+            shininess={2}
+          />
+        </mesh>
+
+        {/* Tree Foliage (Lush, intersecting spheres) */}
+        <mesh position={[0, trunkHeight + canopyHeight * 0.35, 0]} castShadow receiveShadow>
+          <sphereGeometry args={[leafRadius, 12, 12]} />
+          <meshPhongMaterial
+            color={0x2d8a4e}
+            specular={0x112211}
+            shininess={3}
+          />
+        </mesh>
+        <mesh position={[leafRadius * 0.35, trunkHeight + canopyHeight * 0.6, leafRadius * 0.2]} castShadow receiveShadow>
+          <sphereGeometry args={[leafRadius * 0.75, 12, 12]} />
+          <meshPhongMaterial
+            color={0x3cb371}
+            specular={0x112211}
+            shininess={3}
+          />
+        </mesh>
+        <mesh position={[-leafRadius * 0.3, trunkHeight + canopyHeight * 0.5, -leafRadius * 0.3]} castShadow receiveShadow>
+          <sphereGeometry args={[leafRadius * 0.8, 12, 12]} />
+          <meshPhongMaterial
+            color={0x1e6a39}
+            specular={0x112211}
+            shininess={3}
+          />
+        </mesh>
+
+        {/* Label */}
+        {showLabels && (
+          <primitive
+            object={makeSprite(
+              obs.label || `TREE ${index + 1}`,
+              "#22FF88",
+              14,
+              0, oH + 0.6, 0,
+              2.2, 0.55,
+              "rgba(5,15,5,.8)"
+            )}
+          />
+        )}
+      </group>
+    );
+  }
+
   return (
     <group ref={groupRef} position={[mx, 0, mz]}>
       {/* Cascading Tiers */}

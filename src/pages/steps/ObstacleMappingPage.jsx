@@ -30,6 +30,7 @@ const ObstacleMappingPage = () => {
   const mapObstacle = (o) => ({
     id: o.id,
     name: o.name || o.label || `Obs ${o.id}`,
+    type: o.type || 'building',
     height: o.height !== undefined ? o.height : o.h || 10,
     width: o.width !== undefined ? o.width : o.w || 6,
     depth: o.depth !== undefined ? o.depth : o.d || 6,
@@ -51,6 +52,7 @@ const ObstacleMappingPage = () => {
     const raw = {
       id: nextId,
       name: `Obs ${nextId}`,
+      type: 'building',
       height: 10,
       width: 6,
       depth: 6,
@@ -164,6 +166,7 @@ const ObstacleMappingPage = () => {
                     <tr>
                       <th>#</th>
                       <th>Name</th>
+                      <th>Type</th>
                       <th>Height(ft)</th>
                       <th>Width(ft)</th>
                       <th>Depth(ft)</th>
@@ -184,6 +187,16 @@ const ObstacleMappingPage = () => {
                             onChange={(e) => updateObstacle(obs.id, 'name', e.target.value)}
                             style={{width: '88px'}}
                           />
+                        </td>
+                        <td>
+                          <select
+                            value={obs.type || 'building'}
+                            onChange={(e) => updateObstacle(obs.id, 'type', e.target.value)}
+                            style={{width: '80px', padding: '2px 4px', background: 'var(--bg-card)', color: 'var(--text)', border: '1px solid var(--border)'}}
+                          >
+                            <option value="building">Building</option>
+                            <option value="tree">Tree</option>
+                          </select>
                         </td>
                         <td>
                           <input 
