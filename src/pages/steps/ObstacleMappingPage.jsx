@@ -31,6 +31,7 @@ const ObstacleMappingPage = () => {
     id: o.id,
     name: o.name || o.label || `Obs ${o.id}`,
     type: o.type || 'building',
+    placement: o.placement || 'rooftop',
     height: o.height !== undefined ? o.height : o.h || 10,
     width: o.width !== undefined ? o.width : o.w || 6,
     depth: o.depth !== undefined ? o.depth : o.d || 6,
@@ -53,6 +54,7 @@ const ObstacleMappingPage = () => {
       id: nextId,
       name: `Obs ${nextId}`,
       type: 'building',
+      placement: 'rooftop',
       height: 10,
       width: 6,
       depth: 6,
@@ -76,6 +78,12 @@ const ObstacleMappingPage = () => {
     const newObstacles = obstacles.map(obs => {
       if (obs.id === id) {
         const updated = { ...obs, [field]: value };
+        if (field === 'type' && value === 'tree') {
+          updated.placement = 'ground';
+        }
+        if (field === 'type' && value === 'building') {
+          updated.placement = 'rooftop';
+        }
         return mapObstacle(updated);
       }
       return obs;
@@ -167,6 +175,7 @@ const ObstacleMappingPage = () => {
                       <th>#</th>
                       <th>Name</th>
                       <th>Type</th>
+                      <th>Placement</th>
                       <th>Height(ft)</th>
                       <th>Width(ft)</th>
                       <th>Depth(ft)</th>
@@ -196,6 +205,16 @@ const ObstacleMappingPage = () => {
                           >
                             <option value="building">Building</option>
                             <option value="tree">Tree</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select
+                            value={obs.placement || 'rooftop'}
+                            onChange={(e) => updateObstacle(obs.id, 'placement', e.target.value)}
+                            style={{width: '80px', padding: '2px 4px', background: 'var(--bg-card)', color: 'var(--text)', border: '1px solid var(--border)'}}
+                          >
+                            <option value="rooftop">Rooftop</option>
+                            <option value="ground">Ground</option>
                           </select>
                         </td>
                         <td>

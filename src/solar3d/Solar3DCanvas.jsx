@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, Suspense } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -22,8 +22,12 @@ function SceneContent({ G, onCapture }) {
   const moveMode = useSolarStore((s) => s.moveMode);
   const { bindGroup, unBindGroup, onPointerDown, onPointerMove, onPointerUp } = useDragMove();
 
+  const N = G?.buildingFloors || 0;
+  const STORY_HEIGHT = 2.85;
+  const roofHeight = N * STORY_HEIGHT;
+
   // Camera orbit (replaces original mousedown/mousemove/wheel listeners)
-  useCameraOrbit({ enabled: !moveMode });
+  useCameraOrbit({ enabled: !moveMode, roofHeight });
 
   // Expose capture function to parent
   const { gl, scene, camera } = useThree();
@@ -46,18 +50,23 @@ function SceneContent({ G, onCapture }) {
 
       {/* Environment */}
       <Ground />
-      <Building G={G} />
 
-      {/* Solar elements */}
-      <Panels    G={G} bindGroup={bindGroup} unBindGroup={unBindGroup} />
-      <Obstacles G={G} bindGroup={bindGroup} unBindGroup={unBindGroup} />
-      <Wiring    G={G} panelPositions={[]} />
-      <InverterBattery G={G} bindGroup={bindGroup} unBindGroup={unBindGroup} />
+      {/* Elevated Building & Solar Elements */}
+      <group position={[0, roofHeight, 0]}>
+        <Building G={G} />
 
-      {/* Drag-move hit surface */}
+        {/* Solar elements */}
+        <Panels    G={G} bindGroup={bindGroup} unBindGroup={unBindGroup} />
+        <Obstacles G={G} bindGroup={bindGroup} unBindGroup={unBindGroup} />
+        <Wiring    G={G} panelPositions={[]} />
+        <InverterBattery G={G} bindGroup={bindGroup} unBindGroup={unBindGroup} />
+      </group>
+
+      {/* Drag-move hit surface (elevated to roofHeight) */}
       {moveMode && (
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
+          position={[0, roofHeight, 0]}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -96,7 +105,9 @@ export default function Solar3DCanvas({ G, onCapture }) {
           gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         }}
       >
-        <SceneContent G={G} onCapture={captureRef} />
+        <Suspense fallback={null}>
+          <SceneContent G={G} onCapture={captureRef} />
+        </Suspense>
       </Canvas>
 
       {/* Theme / control bar below the canvas */}

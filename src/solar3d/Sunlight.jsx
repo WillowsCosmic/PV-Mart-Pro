@@ -55,13 +55,13 @@ export default function Sunlight({ lat }) {
   return (
     <group>
       {/* Ambient Light */}
-      <ambientLight intensity={0.9} color={0xffffff} />
+      <ambientLight intensity={0.4} color={0xffffff} />
 
       {/* Hemisphere Light */}
       <hemisphereLight
         color={theme.hemi}
         groundColor={theme.hemiGnd}
-        intensity={1.1}
+        intensity={0.6}
       />
 
       {/* Directional Sun Light */}
@@ -74,11 +74,11 @@ export default function Sunlight({ lat }) {
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-camera-near={0.5}
-        shadow-camera-far={100}
-        shadow-camera-left={-25}
-        shadow-camera-right={25}
-        shadow-camera-top={25}
-        shadow-camera-bottom={-25}
+        shadow-camera-far={160}
+        shadow-camera-left={-38}
+        shadow-camera-right={38}
+        shadow-camera-top={38}
+        shadow-camera-bottom={-38}
         shadow-bias={-0.0005}
       />
 

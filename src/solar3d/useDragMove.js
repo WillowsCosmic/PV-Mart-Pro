@@ -57,6 +57,11 @@ export function useDragMove() {
       g.traverse((m) => {
         if (m.isMesh && m.material) {
           [].concat(m.material).forEach((mat) => {
+            // Restore original emissive color if stored
+            if (mat.emissive && mat.userData.originalEmissive !== undefined) {
+              mat.emissive.setHex(mat.userData.originalEmissive);
+            }
+
             if (group === null || g === group) {
               mat.opacity = 1.0; mat.transparent = false;
             } else {
@@ -70,7 +75,13 @@ export function useDragMove() {
       group.traverse((m) => {
         if (m.isMesh && m.material) {
           [].concat(m.material).forEach((mat) => {
-            if (mat.emissive) mat.emissive.set(0x224422);
+            if (mat.emissive) {
+              // Store original emissive color if not already stored
+              if (mat.userData.originalEmissive === undefined) {
+                mat.userData.originalEmissive = mat.emissive.getHex();
+              }
+              mat.emissive.set(0x224422);
+            }
           });
         }
       });
@@ -99,6 +110,7 @@ export function useDragMove() {
         highlight(found.group);
         const plane = getMovePlane();
         plane.position.copy(hits[0].point);
+        plane.updateMatrixWorld(true);
         const planeHits = raycaster.intersectObject(plane);
         if (planeHits.length > 0) {
           moveOffset.current.copy(planeHits[0].point).sub(found.group.position);
@@ -112,6 +124,7 @@ export function useDragMove() {
     mouse.current = getNDC(e);
     raycaster.setFromCamera(mouse.current, camera);
     const plane = getMovePlane();
+    plane.updateMatrixWorld(true);
     const hits  = raycaster.intersectObject(plane);
     if (hits.length > 0) {
       const newPos = hits[0].point.sub(moveOffset.current);

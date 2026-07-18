@@ -7,7 +7,7 @@ import * as THREE from "three";
  * Must be used inside a component that lives within <Canvas>.
  * Replaces the manual mousedown/mousemove/wheel listeners from scene3d.js.
  */
-export function useCameraOrbit({ enabled = true } = {}) {
+export function useCameraOrbit({ enabled = true, roofHeight = 0 } = {}) {
   const { gl, camera } = useThree();
   const state = useRef({
     isDragging: false,
@@ -30,10 +30,10 @@ export function useCameraOrbit({ enabled = true } = {}) {
       const pR = THREE.MathUtils.degToRad(Math.max(5, Math.min(85, s.phi)));
       camera.position.set(
         s.radius * Math.sin(tR) * Math.cos(pR),
-        s.radius * Math.sin(pR),
+        s.radius * Math.sin(pR) + roofHeight,
         s.radius * Math.cos(tR) * Math.cos(pR)
       );
-      camera.lookAt(0, 0, 0);
+      camera.lookAt(0, roofHeight, 0);
     }
 
     function onMouseDown(e) {
@@ -126,5 +126,5 @@ export function useCameraOrbit({ enabled = true } = {}) {
       cv.removeEventListener("touchmove",  onTouchMove);
       cv.removeEventListener("touchend",   onTouchEnd);
     };
-  }, [enabled, gl, camera]);
+  }, [enabled, gl, camera, roofHeight]);
 }

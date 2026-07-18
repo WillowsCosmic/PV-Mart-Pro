@@ -260,6 +260,42 @@ const SiteLocationPage = () => {
                                     </span>
                                 </div>
                             </div>
+                            <div className="r2" style={{marginTop: '.7rem'}}>
+                                <div className="fg">
+                                    <label>Building Floors (Height Settings)</label>
+                                    <select
+                                        id="building-floors"
+                                        value={G.buildingFloors || 0}
+                                        onChange={(e) => updateG({ buildingFloors: parseInt(e.target.value) || 0 })}
+                                        style={{
+                                            width: '100%',
+                                            padding: '0.4rem',
+                                            background: 'var(--bg-card)',
+                                            color: 'var(--text)',
+                                            border: '1px solid var(--border)',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <option value={0}>Ground Floor (10 ft)</option>
+                                        <option value={1}>1st Floor (20 ft)</option>
+                                        <option value={2}>2nd Floor (30 ft)</option>
+                                        <option value={3}>3rd Floor (40 ft)</option>
+                                        <option value={4}>4th Floor (50 ft)</option>
+                                        <option value={5}>5th Floor (60 ft)</option>
+                                        <option value={6}>6th Floor (70 ft)</option>
+                                        <option value={7}>7th Floor (80 ft)</option>
+                                        <option value={8}>8th Floor (90 ft)</option>
+                                        <option value={9}>9th Floor (100 ft)</option>
+                                        <option value={10}>10th Floor (110 ft)</option>
+                                    </select>
+                                </div>
+                                <div className="fg" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: '0.5rem' }}>
+                                    <span style={{ fontSize: '.75rem', color: '#9BA3BE', marginTop: '1.2rem' }}>
+                                        🏢 Roof Elevation: <b>{(G.buildingFloors || 0) * 10 + 10} ft</b> above ground
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div className="pc">
                             <div className="pc-t">📊 Site Summary</div>
@@ -285,7 +321,8 @@ const SiteLocationPage = () => {
                                 <div className="dim-item">
                                     📏 <b>W:</b> <span id="d-roofW">{roofWidth}</span>ft · 
                                     <b>D:</b> <span id="d-roofD">{roofDepth}</span>ft · 
-                                    <b>Parapet:</b> <span id="d-parapetH">{parapetHeight}</span>ft
+                                    <b>Parapet:</b> <span id="d-parapetH">{parapetHeight}</span>ft · 
+                                    <b>Floor:</b> {G.buildingFloors === 0 ? 'Ground' : `${G.buildingFloors}st`} ({(G.buildingFloors || 0) * 10 + 10}ft)
                                 </div>
                                 <div className="dim-item">🏗 Array: <b id="array-dims">—</b></div>
                                 <div className="dim-item">
